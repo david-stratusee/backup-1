@@ -1,0 +1,39 @@
+#!/usr/bin/expect -f
+
+proc proc_cmd {host command} {
+    set timeout 50
+    spawn ssh $host
+    expect {
+        "$ " {
+            send "$command\r"
+        }
+        timeout { 
+            send_user "false1"
+            exit 2 
+        }
+    }
+
+    expect {
+        "$ " {
+            send "exit\r"
+        }
+        timeout {
+            send_user "false2"
+            exit 3
+        }
+    }
+    send_user "\n"
+}
+
+if {$argc > 0} {
+    set host [lindex $argv 0]
+} else {
+    set host aie
+}
+if {$argc > 1} {
+    set command [lindex $argv 1]
+} else {
+    set command "/usr/local/holonet/scripts/show_core.sh"
+}
+
+proc_cmd dev-$host.stratusee.com "$command"

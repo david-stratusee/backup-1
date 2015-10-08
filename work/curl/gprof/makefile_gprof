@@ -1,0 +1,4 @@
+all: gprof-helper.so
+
+gprof-helper.so: gprof-helper.c
+	gcc -shared -fPIC gprof-helper.c -o gprof-helper.so -lpthread -ldl

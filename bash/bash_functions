@@ -1,0 +1,34 @@
+
+function diff_r()
+{
+	diff $@ | less -RF
+}
+
+function gdiff()
+{
+    if [ $# -gt 0 ]; then
+        git wdiff `cat $@`
+    else
+        echo "gdiff filename"
+    fi
+}
+
+function pssx()
+{
+    filterlist=$1
+    arglist="user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,bsdtime,wchan:22,args"
+    pidlist=`ps axfo ${arglist} | grep -v grep | egrep --color=auto "(${filterlist})" | awk '{print $2}'`
+    if [ "${pidlist}" == "" ]; then
+        echo No such process: $1
+        return 1;
+    fi
+    newpidlist=`echo $pidlist | sed -e 's/ /,/g'`
+    ps mo ${arglist} --pid "${newpidlist}"
+    return 0
+}
+
+function psmx()
+{
+    pssx "squid|resmgr|icap|http|redis|logstash|LogDaemon|_watchdog\b|ssl_crtd"
+}
+

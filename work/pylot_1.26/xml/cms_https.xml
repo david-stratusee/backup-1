@@ -1,0 +1,7 @@
+<testcases>
+    <!-- SAMPLE TEST CASE -->
+    <case>
+        <url>https://192.168.10.31:3000/assets/jquery.flot.js</url>
+        <add_header>Cache-control: no-cache</add_header>
+    </case>
+</testcases>

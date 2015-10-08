@@ -1,0 +1,26 @@
+[user]
+	name = david-stratusee
+	email = david@stratusee.com
+[color]
+	ui = true
+[diff]
+    tool = default-difftool
+[difftool "default-difftool"]
+    cmd = default-difftool.sh $LOCAL $REMOTE
+[difftool]
+    prompt = false
+[push]
+	default = simple
+[log]  
+	date = local
+[core]
+	autocrlf = input
+	editor = vim
+    sparsecheckout = true
+[alias]
+	unstage = reset HEAD --
+	last = log -5 HEAD
+	wdiff = diff --ignore-space-at-eol --ignore-space-change --ignore-all-space
+    sparse = read-tree -m -u HEAD
+[http]
+	sslVerify = false

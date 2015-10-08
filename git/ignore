@@ -1,0 +1,95 @@
+# for vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+*.swp
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+*.slo
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lai
+*.lo
+
+# Fortran module files
+*.mod
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# zip
+*.tgz
+*.tar.gz
+*.zip
+
+# python
+*.py[cod]
+*.egg
+*.egg-info
+*.cci
+
+# for log
+*.log
+*.diff
+
+# for tags
+cscope.*
+tags
+*.tags
+udtags
+
+# autoconf
+autoconf.h
+config.status
+**/helpers/*
+**/man/*
+autom4te.cache
+aclocal.m4
+compile
+configure
+depcomp
+install-sh
+missing
+stamp-h1
+#**/Makefile.in
+
+# for cmake
+cbuild
+CMakeCache.txt
+CMakeFiles
+#Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# my temp dir
+**/temp/*
+
+# for tmp file
+**/.*
+!/.gitignore
+

@@ -1,0 +1,3 @@
+https://github.com/rofl0r/proxychains-ng.git
+
+./configure --prefix=/usr --sysconfdir=/etc

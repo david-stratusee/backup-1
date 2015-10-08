@@ -1,0 +1,28 @@
+
+PATH=$PATH:$HOME/.local/bin:/usr/games:$HOME/bin:/usr/local/holonet/scripts
+export PATH
+
+# Set MANPATH so it includes users' private man if it exists
+if [ -d "${HOME}/man" ]; then
+   MANPATH="${HOME}/man:${MANPATH}"
+fi
+
+#export PS1='\n[\A]\[\e[36m\]\u@\[\e[33m\]\W\[\e[0m\]\$ '
+export PS1='\n[\A]\[\e[36m\]\u-C@\[\e[35m\]\W\[\e[0m\]\$ '
+export CSCOPE_EDITOR="vim"
+
+# History Options
+#
+# Don't put duplicate lines in the history.
+#export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}erasedups
+#
+# Ignore some controlling instructions
+# HISTIGNORE is a colon-delimited list of patterns which should be excluded.
+# The '&' is a special pattern which suppresses duplicate entries.
+#export HISTIGNORE=$'[ \t]*:&:[fb]g:ls'
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:history:ls:pwd:ll:ls -lrt' # Ignore the ls command as well
+export HISTTIMEFORMAT='%y-%m-%d %T	'
+#
+# Whenever displaying the prompt, write the previous line to disk
+# export PROMPT_COMMAND="history -a"

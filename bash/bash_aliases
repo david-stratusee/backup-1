@@ -1,0 +1,44 @@
+#
+# Some shortcuts for different directory listings
+alias ls='ls -hF --color=auto --show-control-chars --group-directories-first' # classify files in colour
+alias dir='ls --format=vertical'
+alias vdir='ls --format=long'
+alias ll='ls -l'                                    # long list
+alias la='ls -A'                                    # all but . and ..
+alias l='ls -CF'                                    #
+alias wch='which -a'
+
+alias diff='colordiff -E -b -w -B -u -p'
+alias diffy='colordiff -y -E -b -w -W 200'
+alias hexdump='hexdump -C'
+alias pss='ps axfo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,bsdtime,wchan:22,args'
+alias psm='pss | grep -v grep | egrep --color=auto "(aie_test|sslsplit|squid|resmgr|icap|http|redis|logstash|LogDaemon|_watchdog\b|ssl_crtd|main.js|COMMAND)"'
+alias pst='pidstat -t | egrep --color=auto "(aie_test|sslsplit|squid|resmgr|icap|http|redis|logstash|LogDaemon|_watchdog\b|ssl_crtd|main.js|CPU)"'
+alias pstree='pstree -ap'
+alias tcpdump='tcpdump -nK -s 0'
+alias hcheck='ls holonet/hfile/* | grep '
+alias hram='ls holonet/hfile_ram/* | grep '
+alias pprof='pprof --text --stacks'
+
+alias echo='echo -e'
+alias yacc='yacc -d -l'
+
+alias df='df -h'
+alias du='du -h'
+#
+# Misc :)
+alias less='less -r'                # raw control characters
+alias whence='type -a'              # where, of a sort
+alias ngrep='grep -n --color=auto --text'      # show differences in colour
+alias grep='grep --color=auto --text'      # show differences in colour
+alias negrep='egrep -n --color=auto --text'      # show differences in colour
+alias egrep='egrep --color=auto --text' # show differences in colour
+alias nfgrep='fgrep -n --color=auto --text' # show differences in colour
+alias fgrep='fgrep --color=auto --text' # show differences in colour
+alias route='route -nee'
+alias yum_inst='yum -y install'
+
+function diffl
+{
+    colordiff -E -b -w -B -u -p "$@" | less -RF
+}

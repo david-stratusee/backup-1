@@ -1,0 +1,74 @@
+cmake_minimum_required(VERSION 2.8)
+project(sslsplit)
+
+set(UPPERDIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../AIE)
+include(${UPPERDIR}/script/CMakeLists_common.txt)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+string(TIMESTAMP CURDATE "%Y-%m-%d")
+set(PROGRAM_NAME sslsplit)
+set(ENABLE_NETFILTER -DHAVE_NETFILTER)
+#add_definitions(-std=c99 -D_GNU_SOURCE -DBNAME="sslsplit" -DPNAME="SSLsplit" -DVERSION="0.4.11-dirty" -DBUILD_DATE="2015-04-27" -DFEATURES="-DHAVE_NETFILTER" -DBUILD_INFO="V:GIT" -DHAVE_NETFILTER -pedantic -D_FORTIFY_SOURCE=2)
+add_definitions(-D_GNU_SOURCE -DBNAME="${PROGRAM_NAME}" -DPNAME="${PROGRAM_NAME}" -DVERSION="0.4.11-dirty" -DBUILD_DATE="${CURDATE}" -DFEATURES="${ENABLE_NETFILTER}" -DBUILD_INFO="V:GIT" ${ENABLE_NETFILTER} -D_FORTIFY_SOURCE=2)
+
+set(source_list 
+	${CMAKE_CURRENT_SOURCE_DIR}/attrib.h
+	${CMAKE_CURRENT_SOURCE_DIR}/app_service.c
+	${CMAKE_CURRENT_SOURCE_DIR}/app_service.h
+	${CMAKE_CURRENT_SOURCE_DIR}/base64.c
+	${CMAKE_CURRENT_SOURCE_DIR}/base64.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cache.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cache.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cachedsess.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cachedsess.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cachefkcrt.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cachefkcrt.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cachemgr.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cachemgr.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cachessess.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cachessess.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cachetgcrt.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cachetgcrt.h
+	${CMAKE_CURRENT_SOURCE_DIR}/cert.c
+	${CMAKE_CURRENT_SOURCE_DIR}/cert.h
+	${CMAKE_CURRENT_SOURCE_DIR}/dynbuf.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dynbuf.h
+	${CMAKE_CURRENT_SOURCE_DIR}/khash.h
+	${CMAKE_CURRENT_SOURCE_DIR}/log.c
+	${CMAKE_CURRENT_SOURCE_DIR}/log.h
+	${CMAKE_CURRENT_SOURCE_DIR}/logger.c
+	${CMAKE_CURRENT_SOURCE_DIR}/logger.h
+	${CMAKE_CURRENT_SOURCE_DIR}/main.c
+	${CMAKE_CURRENT_SOURCE_DIR}/nat.c
+	${CMAKE_CURRENT_SOURCE_DIR}/nat.h
+	${CMAKE_CURRENT_SOURCE_DIR}/opts.c
+	${CMAKE_CURRENT_SOURCE_DIR}/opts.h
+	${CMAKE_CURRENT_SOURCE_DIR}/proc.c
+	${CMAKE_CURRENT_SOURCE_DIR}/proc.h
+	${CMAKE_CURRENT_SOURCE_DIR}/proxy.c
+	${CMAKE_CURRENT_SOURCE_DIR}/proxy.h
+	${CMAKE_CURRENT_SOURCE_DIR}/pxyconn.c
+	${CMAKE_CURRENT_SOURCE_DIR}/pxyconn.h
+	${CMAKE_CURRENT_SOURCE_DIR}/pxysslshut.c
+	${CMAKE_CURRENT_SOURCE_DIR}/pxysslshut.h
+	${CMAKE_CURRENT_SOURCE_DIR}/pxythrmgr.c
+	${CMAKE_CURRENT_SOURCE_DIR}/pxythrmgr.h
+	${CMAKE_CURRENT_SOURCE_DIR}/ssl.c
+	${CMAKE_CURRENT_SOURCE_DIR}/ssl.h
+	${CMAKE_CURRENT_SOURCE_DIR}/sys.c
+	${CMAKE_CURRENT_SOURCE_DIR}/sys.h
+	${CMAKE_CURRENT_SOURCE_DIR}/thrqueue.c
+	${CMAKE_CURRENT_SOURCE_DIR}/thrqueue.h
+	${CMAKE_CURRENT_SOURCE_DIR}/url.c
+	${CMAKE_CURRENT_SOURCE_DIR}/url.h
+	${CMAKE_CURRENT_SOURCE_DIR}/util.c
+	${CMAKE_CURRENT_SOURCE_DIR}/util.h
+	${CMAKE_CURRENT_SOURCE_DIR}/version.c
+	${CMAKE_CURRENT_SOURCE_DIR}/version.h
+)
+
+add_executable(sslsplit ${source_list})
+target_link_libraries(sslsplit ${UPPERDIR}/libs/libcommon.a)
+target_link_libraries(sslsplit ${COMMON_LIB_DEP_LIBS})
+target_link_libraries(sslsplit ssl crypto event_openssl event_pthreads event)
+
+install(TARGETS sslsplit RUNTIME DESTINATION /usr/local/bin)

@@ -1,0 +1,2 @@
+http  "http://192.168.10.31/assets/jquery.flot.js"
+https "https://192.168.10.31:3000/assets/jquery.flot.js"

@@ -1,0 +1,174 @@
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.function ==
+/************************************************
+ *         Name: |?FUNCTION_NAME|
+ *  Description: 
+ *     Argument:
+ *       Return:
+ ************************************************/
+int |FUNCTION_NAME|(<CURSOR>)
+{
+
+}        /* -- end of function |FUNCTION_NAME| -- */
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.function-static ==
+/************************************************
+ *         Name: |?FUNCTION_NAME|
+ *  Description: <CURSOR>
+ *     Argument:
+ *       Return:
+ ************************************************/
+static int<CURSOR> |FUNCTION_NAME|(<+argument list+>)
+{
+    return <+return value+>;
+}        /* -- end of static function |FUNCTION_NAME| -- */
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.main ==
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <stdint.h>
+
+/************************************************
+ *         Name: main
+ *  Description: main function
+ *     Argument:
+ *       Return:
+ ************************************************/
+int main (int argc, char *argv[])
+{
+<CURSOR>return EXIT_SUCCESS;
+}       /* -- end of function main -- */
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.enum ==
+typedef enum _|?ENUM_NAME:u|_EN {
+   <CURSOR>
+} |ENUM_NAME:u|_EN;   /* -- end of |ENUM_NAME:u|_EN -- */
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.struct ==
+/* Description: |?Description| */
+typedef struct _|?STRUCT_NAME|_t {
+   <CURSOR>
+} |STRUCT_NAME|_t;   /* -- end of |STRUCT_NAME|_t -- */
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.union ==
+typedef union _|?UNION_NAME|_un {<CURSOR>
+} |UNION_NAME|_un;    /* -- end of |UNION_NAME|_un -- */
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.printf == insert ==
+printf("<CURSOR>\n");
+== idioms.scanf == insert ==
+scanf("<CURSOR>", &);
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.calloc ==
+|?POINTER| = (<+TYPE+> *)calloc((size_t)(<CURSOR><+COUNT+>), sizeof(<+TYPE+>));
+if (|POINTER| == NULL) {
+    fprintf ( stderr, "dynamic memory allocation failed\n" );
+    return -1;
+}
+
+free(|POINTER|);
+|POINTER| = NULL;
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.malloc ==
+|?POINTER| = (<+TYPE+> *)malloc(sizeof(<CURSOR><+TYPE+>));
+if (|POINTER| == NULL) {
+    fprintf(stderr, "\ndynamic memory allocation failed\n" );
+    return -1;
+}
+
+free(|POINTER|);
+|POINTER| = NULL;
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.realloc ==
+|?POINTER| = (<+TYPE+> *)realloc(|POINTER|, sizeof(<CURSOR><+TYPE+>));
+if (|POINTER| == NULL) {
+    fprintf(stderr, "\ndynamic memory reallocation failed\n" );
+    exit(EXIT_FAILURE);
+}
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.sizeof == insert ==
+sizeof(<CURSOR>)
+== idioms.assert == insert ==
+assert(<CURSOR>);
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.open-input-file ==
+char *|?FILEPOINTER|_filename = <CURSOR>;    /* input-file name    */
+FILE *fp_|FILEPOINTER| = fopen((const char *)|FILEPOINTER|_filename, "r");
+if (fp_|FILEPOINTER| == NULL) {
+    fprintf(stderr, "couldn't open file '%s'; %s\n", |FILEPOINTER|_filename, strerror(errno));
+    goto err;
+}
+
+#define |FILEPOINTER:u|_LINE_LEN 1024
+char readline[|FILEPOINTER:u|_LINE_LEN] = {0};
+char *pline = readline;
+char *pline_end = NULL;
+while (memset(readline, 0, |FILEPOINTER:u|_LINE_LEN) && fgets(readline, |FILEPOINTER:u|_LINE_LEN, fp_|FILEPOINTER|)) {
+    pline = readline;
+    while (*pline == ' ' || *pline == '\t' || *pline == '\r' || *pline == '\n') {
+        pline++;
+    }
+
+    if (pline[0] == '\0' || pline[0] == '#') {
+        continue;
+    }
+
+    pline_end = pline + strlen(pline) - 1;
+    while ((*pline_end == '\r' || *pline_end == '\n') && pline_end >= pline) {
+        pline_end--;
+    }
+    *(++pline_end) = '\0';
+
+    /***************************************************
+     * TODO: use pline here, filtered # and empty lines
+     ***************************************************/
+}
+
+fclose(fp_|FILEPOINTER|);
+fp_|FILEPOINTER| = NULL;
+return 0;
+
+err:
+if (fp_|FILEPOINTER|) {
+    fclose(fp_|FILEPOINTER|);
+    fp_|FILEPOINTER| = NULL;
+}
+return -1;
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.open-output-file ==
+FILE *fp_|?FILEPOINTER| = NULL;        /* input-file pointer */
+char *|FILEPOINTER|_filename = "<CURSOR>";    /* output-file name    */
+
+fp_|FILEPOINTER| = fopen((const char *)|FILEPOINTER|_filename, "w");
+if (fp_|FILEPOINTER| == NULL) {
+    fprintf(stderr, "couldn't open file '%s'; %s\n", |FILEPOINTER|_filename, strerror(errno));
+    goto err;
+}
+
+fclose(fp_|FILEPOINTER|);    /* close output file   */
+fp_|FILEPOINTER| = NULL;
+return 0;
+
+err:
+if (fp_|FILEPOINTER|) {
+    fclose(fp_|FILEPOINTER|);
+    fp_|FILEPOINTER| = NULL;
+}
+return -1;
+
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== idioms.fprintf == insert ==
+fprintf ( |?FILEPOINTER|, "<CURSOR>\n",  );
+== idioms.fscanf == insert ==
+fscanf ( |?FILEPOINTER|, "<CURSOR>", & );
+$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
