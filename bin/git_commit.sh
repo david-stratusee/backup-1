@@ -65,9 +65,8 @@ if [ "$file_list" == "" ]; then
 fi
 
 if [ "$msg" == "" ]; then
-    echo "message error, use -m to set"
-    Usage $0
-    exit 1
+    msg_action="-m"
+    msg="Update $file_list"
 fi
 
 if [ "$action" != "add" ] && [ "$action" != "rm" ]; then
