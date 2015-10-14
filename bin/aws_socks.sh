@@ -24,6 +24,7 @@ host_port=${available_host_port[1]}
 ETH="Wi-Fi"
 aliveinterval=0
 USE_SSH=0
+PROXY_PORT=15500
 #-------------------------------------------------------------------------------
 # config end
 #-------------------------------------------------------------------------------
@@ -31,9 +32,14 @@ USE_SSH=0
 function show_proxy()
 {
     echo ===========================
-    echo proxy.pac: ${local_proxydir}
-    echo "PAC_PROXY STATE:"
-    networksetup -getautoproxyurl ${ETH}
+    if [ ${proxy_type} -eq ${PAC_PROXY} ]; then
+        echo proxy.pac: ${local_proxydir}
+        echo "PAC_PROXY STATE:"
+        networksetup -getautoproxyurl ${ETH}
+    else
+        echo "SOCKS_PROXY STATE:"
+        networksetup -getsocksfirewallproxy ${ETH}
+    fi
     echo ===========================
     echo "PROCESS INFO:[${USE_SSH}]"
     ps -ef | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|httpd|watch_socks|watch_sso)"
@@ -44,7 +50,7 @@ function show_proxy()
         echo ===========================
     elif [ ${USE_SSH} -eq 0 ]; then
         echo "LISTEN INFO:"
-        netstat -anb | grep 15500 | egrep --color=auto -i "(listen|established)"
+        netstat -anb | grep ${PROXY_PORT} | egrep --color=auto -i "(listen|established)"
         echo ===========================
         if [ -f /tmp/shadowsocks.log ]; then
             echo "/tmp/shadowsocks.log:"
@@ -122,15 +128,16 @@ function update_pac()
         #wget -T 10 -nv http://david-holonetsecurity.github.io/proxy.pac -P /tmp/
         if [ $? -eq 0 ]; then
             sudo mv /tmp/proxy.pac ${local_proxydir}/
-        elif [ ! -f ${local_proxydir}/proxy.pac ]; then
-            echo "can not get proxy.pac, exit..."
-            return 1
-        else
-            echo "can not get proxy.pac from github, so just use old one"
+            echo "Save proxy.pac to ${local_proxydir}"
         fi
     fi
 
-    return 0
+    if [ ! -f ${local_proxydir}/proxy.pac ]; then
+        echo "can not get proxy.pac, exit..."
+        return 1
+    else
+        return 0
+    fi
 }
 
 function stop_apache()
@@ -156,10 +163,11 @@ function aws_socks_help()
     echo "-l             : for query socks proxy"
     echo "-c             : for clear socks proxy"
     echo "-r             : for reboot socks proxy"
+    echo "-S             : for socks proxy, default is pac proxy"
 
     echo -e "\n### for PAC   ###"
     echo "-e ETH         : for ETH-TYPE, default Wi-Fi, only used by MacOS"
-    echo "-f             : for local file for pac, only for Safari"
+    echo "-f             : for remote pac url"
 
     echo -e "\n### for SSH   ###"
     echo "-s             : ssh mode"
@@ -174,7 +182,10 @@ function aws_socks_help()
 MODE="normal"
 restart=0
 use_local_web=1
-while getopts 'a:e:p:hcrlfs' opt; do
+PAC_PROXY=0
+SOCKS_PROXY=1
+proxy_type=${PAC_PROXY}
+while getopts 'a:e:p:hcrlfsS' opt; do
     case $opt in
         # for proxy
         c|r)
@@ -197,6 +208,9 @@ while getopts 'a:e:p:hcrlfs' opt; do
                 aws_socks_help
                 exit 1
             fi
+            ;;
+        S)
+            proxy_type=${SOCKS_PROXY}
             ;;
 
         # for PAC
@@ -240,7 +254,7 @@ done
 if [ ${use_local_web} -gt 0 ]; then
     local_proxydir="/Library/WebServer/Documents/"
 else
-    local_proxydir="/Applications/Safari.app/Contents/Resources"
+    local_proxydir=""
 fi
 
 if [ "${MODE}" == "clear" ] || [ "${MODE}" == "normal" ]; then
@@ -259,6 +273,7 @@ if [ "${MODE}" == "clear" ] || [ "${MODE}" == "normal" ]; then
 
     stop_apache
     sudo networksetup -setautoproxystate ${ETH} off
+    sudo networksetup -setsocksfirewallproxystate ${ETH} off
     rm -f /tmp/shadowsocks*
 
     if [ ${restart} -gt 0 ]; then
@@ -269,33 +284,38 @@ fi
 if [ "${MODE}" == "normal" ]; then
     fill_and_run_proxy
 
-    which curl >/dev/null
-    t_res=$?
-    if [ $t_res -eq 0 ]; then
-        has_curl=1
-    else
-        has_curl=0
-    fi
+    if [ ${proxy_type} -eq ${PAC_PROXY} ]; then
+        which curl >/dev/null
+        t_res=$?
+        if [ $t_res -eq 0 ]; then
+            has_curl=1
+        else
+            has_curl=0
+        fi
 
-    sudo networksetup -setautoproxystate ${ETH} off
+        sudo networksetup -setautoproxystate ${ETH} off
 
-    update_pac $has_curl
-    if [ $? -ne 0 ]; then
-        exit 1
-    fi
-
-    if [ ! -f ${local_proxydir}/proxy.pac ]; then
-        sudo networksetup -setautoproxyurl ${ETH} "http://david-holonetsecurity.github.io/proxy.pac"
-    else
         if [ ${use_local_web} -gt 0 ]; then
+            update_pac $has_curl
+            if [ $? -ne 0 ]; then
+                error_echo "error when update_pac, clear proxy"
+                echo
+                aws_socks.sh -c
+                exit 1
+            fi
+        fi
+
+        if [ ${use_local_web} -gt 0 ] && [ -f ${local_proxydir}/proxy.pac ]; then
             start_apache
             sudo networksetup -setautoproxyurl ${ETH} "http://127.0.0.1/proxy.pac"
         else
-            sudo networksetup -setautoproxyurl ${ETH} "file://localhost${local_proxydir}/proxy.pac"
+            sudo networksetup -setautoproxyurl ${ETH} "http://david-holonetsecurity.github.io/proxy.pac"
         fi
+        sudo networksetup -setautoproxystate ${ETH} on
+    else
+        sudo networksetup -setsocksfirewallproxy ${ETH} 127.0.0.1 ${PROXY_PORT}
+        sudo networksetup -setsocksfirewallproxystate ${ETH} on
     fi
-
-    sudo networksetup -setautoproxystate ${ETH} on
 fi
 show_proxy
 
