@@ -15,6 +15,7 @@ function git_pull()
     out=`git pull`
     result=$?
 
+    rm -f ~/.netrc
     if [ $result -ne 0 ]; then
         echo "error when git pull"
         return 0
@@ -40,7 +41,6 @@ fi
 curdir=`pwd`
 cd ${HOME}/work/AIE
 git_pull
-rm -f ~/.netrc
 if [ $? -ne 0 ]; then
     ./aie_compile_startup.sh
 else
