@@ -7,7 +7,6 @@ set nocompatible
 source $VIMRUNTIME/vimrc_example.vim
 if has("win32")
     source $VIMRUNTIME/mswin.vim
-    "设置鼠标运行模式为WINDOWS模式
     behave mswin
 endif
 
@@ -201,7 +200,8 @@ syntax on
 set autoindent
 "设置 Backspace 和 Delete 的灵活程度，backspace=2 则没有任何限制
 "设置在哪些模式下使用鼠标功能，mouse=a 表示所有模式
-set mouse=a
+"set mouse=a
+set mouse=
 set backspace=2
 "自动换行
 set wrap
@@ -394,7 +394,11 @@ set complete-=k complete+=k
 "colorscheme desertEx
 "colorscheme Tomorrow-Night-Eighties
 "colorscheme developer
-colorscheme evening256
+if $TERM ==? "linux"
+    colorscheme developer
+else
+    colorscheme evening256
+endif
 
 "设置字体
 "if has("gui")
