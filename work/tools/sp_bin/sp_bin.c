@@ -28,7 +28,7 @@
 int main (int argc, char *argv[])
 {
     if (argc < 3) {
-        printf("Usage: %s filename [-]split_num\n\tminus split_num means merge file", argv[0]);
+        printf("Usage: %s filename [-]split_num\n\tminus split_num means merge file\n", argv[0]);
         return EXIT_FAILURE;
     }
 
