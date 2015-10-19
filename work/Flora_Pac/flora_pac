@@ -420,6 +420,7 @@ function FindProxyForURL(url, host) {
         'apnic.net'                    : 1,
         'gutenberg.org'                : 1,
         'amazon.com'                   : 1,
+        'kindlequan.com'               : 1,
     };
 
     var dangerDomains = {
