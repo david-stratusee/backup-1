@@ -49,7 +49,7 @@ int main (int argc, char *argv[])
         int32_t last_part_len = file_len - (each_part_len * (sp_num - 1));
 
         printf("the file(%s) length is: %d, split into %d parts, each part length: %d, last_part_len: %d\n",
-                input_filename, file_len, each_part_len, last_part_len);
+                input_filename, file_len, sp_num, each_part_len, last_part_len);
         int32_t new_filename_len = strlen(input_filename) + 3;
         char new_filename[new_filename_len];
         memset(new_filename, 0, new_filename_len);
