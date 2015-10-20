@@ -81,9 +81,13 @@ def send_func(fullpath, local_convert):
         server.close()
         print "[%s] OK" % time.asctime(time.localtime(time.time()))
 
+        print "==========================="
+
         return 0
     except Exception, e:
         print 'error when send file: ' + str(e)
+
+        print "==========================="
         return 1
 
 def send_dir_func(fullpath, local_convert):
