@@ -37,6 +37,8 @@ def send_func(fullpath, local_convert):
     basefile=os.path.basename(fullpath)
     msg = MIMEMultipart()
 
+    print 'Size of mobi file %s: %u' % (fullpath, os.path.getsize(fullpath))
+
     try:
         fp = open(fullpath, 'rb')
         att1 = MIMEText(fp.read(), 'base64', 'utf-8')
