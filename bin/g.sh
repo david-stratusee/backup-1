@@ -13,11 +13,12 @@ set -o nounset                              # Treat unset variables as an error
 
 function gohelp()
 {
-    echo -e "Usage: \n\t-m for module(b|c|u|g|s|aie|l2tp|...)\n\t-f for local file\n\t-r for remote_file\n\t-c for command\n\t-e for exit\n\e-l show session"
+    echo -e "Usage: \n\t-m for module(b|c|u|g|p|s|aie|l2tp|...)\n\t-f for local file\n\t-r for remote_file\n\t-c for command\n\t-e for exit\n\e-l show session"
 }
 
 dsthost=""
 username="david"
+remotehome="/home/"$username"/"
 dstip=""
 ssh_dstport=""
 scp_dstport=""
@@ -56,6 +57,12 @@ while getopts 'm:f:r:c:elh' opt; do
                 "s")
                     dsthost="shadowsocks-crazyman.rhcloud.com"
                     username="55e6658f0c1e66d617000070"
+                    remotehome="/var/lib/openshift/"$username"/"
+                    ;;
+                "p")
+                    dsthost="php-crazyman.rhcloud.com"
+                    username="5626ebbc2d5271dce200005b"
+                    remotehome="/var/lib/openshift/"$username"/"
                     ;;
                 *)
                     dsthost="dev-${OPTARG}.stratusee.com"
@@ -102,7 +109,7 @@ if [ ${do_exit} -ne 0 ]; then
 fi
 
 if [ "${remote_file}" != "" ]; then
-    start_dir="/home/david/"
+    start_dir=${remotehome}
     if [ "${remote_file:0:1}" == "/" ]; then
         start_dir=""
     fi
@@ -115,8 +122,8 @@ if [ "${remote_file}" != "" ]; then
         scp -r${scp_dstport} ${username}@${dstip}:${start_dir}${remote_file} .
     fi
 elif [ "${local_file}" != "" ]; then
-    echo scp -r${scp_dstport} ${local_file} ${username}@${dstip}:/home/david/
-    scp -r${scp_dstport} ${local_file} ${username}@${dstip}:/home/david/
+    echo scp -r${scp_dstport} ${local_file} ${username}@${dstip}:${remotehome}
+    scp -r${scp_dstport} ${local_file} ${username}@${dstip}:${remotehome}
 else
     echo ssh${ssh_dstport} ${username}@${dstip} ${cmd}
     ssh${ssh_dstport} ${username}@${dstip} ${cmd}
