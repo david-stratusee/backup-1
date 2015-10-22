@@ -2,7 +2,7 @@
 	name = david-stratusee
 	email = david@stratusee.com
 [color]
-	ui = true
+    ui = true
 [diff]
     tool = default-difftool
 [difftool "default-difftool"]
