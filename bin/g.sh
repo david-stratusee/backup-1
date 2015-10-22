@@ -49,10 +49,12 @@ while getopts 'm:f:r:c:elh' opt; do
                     dsthost="github.com"
                     dstip="github.com"
                     username="git"
+                    remotehome="/home/"$username"/"
                     ;;
                 "b")
                     dsthost="aie.box"
                     username="stratusee"
+                    remotehome="/home/"$username"/"
                     ;;
                 "s")
                     dsthost="shadowsocks-crazyman.rhcloud.com"
