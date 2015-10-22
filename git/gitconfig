@@ -22,5 +22,8 @@
 	last = log -5 HEAD
 	wdiff = diff --ignore-space-at-eol --ignore-space-change --ignore-all-space
     sparse = read-tree -m -u HEAD
+    gca = gc --auto
+    ck = checkout
+    cm = commit
 [http]
 	sslVerify = false

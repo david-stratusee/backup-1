@@ -58,7 +58,11 @@ Session.vim
 *.diff
 
 # for tags
-cscope.*
+#cscope.*
+cscope.files
+cscope.in.out
+cscope.out
+cscope.po.out
 tags
 *.tags
 udtags
