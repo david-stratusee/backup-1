@@ -8,6 +8,11 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+if [ $# -eq 0 ]; then
+    echo "One argument is needed"
+    exit 0
+fi
+
 netstat -anb | head -2
 
 line=`netstat -anb | grep ESTABLISHED | grep "$1"`
