@@ -10,6 +10,35 @@ function fill_cscope_file()
     find ${this_dir} \( -name "*.c" -o -name "*.h" -o -name "*.cc" -o -name "*.cpp" -o -name "*.hpp" \) -type f | egrep -v "(demo|pclint|\/temp\/|\/tmp\/|\/ut\/|utcode|ut_${except_name})" >>$lname
 }
 
+function insert_glib_head()
+{
+    export_file=$1
+    tmp_glib_path="/tmp/.gitlib_path"
+
+    glib_file_path=""
+    if [ -f ${tmp_glib_path} ]; then
+        glib_file_path=$(cat ${tmp_glib_path})
+        if [ "$glib_file_path" == "" ] || [ ! -f $glib_file_path ]; then
+            glib_file_path=""
+            echo -n "" >${tmp_glib_path}
+        fi
+    fi
+    if [ "$glib_file_path" == "" ]; then
+        glib_file_path=$(find /usr -name glibconfig.h 2>/dev/null)
+        if [ "$glib_file_path" != "" ]; then
+            echo $glib_file_path >${tmp_glib_path}
+        fi
+    fi
+    if [ "$glib_file_path" != "" ]; then
+        glibver=$(grep GLIB_MAJOR_VERSION ${glib_file_path} | awk '{print $3}')
+        if [ -d "/usr/include/glib-${glibver}.0/" ]; then
+            find /usr/include/glib-${glibver}.0/ -type f -name "*.h" | grep -v "\/gio\/" >>${export_file}
+        elif [ -d "/usr/local/include/glib-${glibver}.0/" ]; then
+            find /usr/local/include/glib-${glibver}.0/ -type f -name "*.h" | grep -v "\/gio\/" >>${export_file}
+        fi
+    fi
+}
+
 while getopts 'e:i:' opt; do
     case $opt in
         e) except_name=${except_name}'|'$OPTARG;;
@@ -32,14 +61,8 @@ if [ "$include_dir" != "" ]; then
 fi
 
 cgrep.sh -o "^[ ]*#include *<([^>]*)>" | grep -E -o "#include *<([^>]*)>" | sort -u | grep -v "\-\-" | sed -e 's/#include *<//g' | sed -e 's/>//g' >/tmp/csfile.list
+insert_glib_head /tmp/csfile.list
 
-glib_file_path=$(find /usr -name glibconfig.h 2>/dev/null)
-if [ "$glib_file_path" != "" ]; then
-    glibver=$(grep GLIB_MAJOR_VERSION ${glib_file_path} | awk '{print $3}')
-    if [ -d "/usr/include/glib-${glibver}.0/" ]; then
-        find /usr/include/glib-${glibver}.0/ -type f -name "*.h" | grep -v "\/gio\/" >>/tmp/csfile.list
-    fi
-fi
 gcc_version=$(gcc --version | grep gcc | awk '{print $3}')
 while read line; do
     filepath=$line
