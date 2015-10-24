@@ -6,6 +6,7 @@ Session.vim
 .netrwhist
 *~
 *.swp
+.DS_Store
 
 # Object files
 *.o

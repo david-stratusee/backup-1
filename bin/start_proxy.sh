@@ -246,7 +246,9 @@ fi
 
 kill_process "aie_watchdog"
 kill_sslsplit
-sudo mv -f /tmp/sslsplit.log /tmp/sslsplit.log.bak
+if [ -f /tmp/sslsplit.log ]; then
+    sudo mv -f /tmp/sslsplit.log /tmp/sslsplit.log.bak
+fi
 #sudo mv -f /tmp/memtm_ssl.heap /tmp/memtm_ssl.heap.bak
 sleep 1
 script_prefix=
