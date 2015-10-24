@@ -31,14 +31,41 @@ if [ "$include_dir" != "" ]; then
     fill_cscope_file ${include_dir} "cscope.files"
 fi
 
-cgrep.sh -o "#include <([^>]*)>" | sort -u | grep -v "\-\-" | sed -e 's/#include </\/usr\/include\//g' | sed -e 's/>//g' >/tmp/csfile.list
-cgrep.sh -o "#include <([^>]*)>" | sort -u | grep -v "\-\-" | sed -e 's/#include </\/usr\/local\/include\//g' | sed -e 's/>//g' >>/tmp/csfile.list
-if [ -d /usr/include/glib-2.0/ ]; then
-    find /usr/include/glib-2.0/ -type f -name "*.h" | grep -v "\/gio\/" >>/tmp/csfile.list
-fi
-while read line; do
-    if [ -f $line ] && [ ! -h $line ]; then
-        echo $line >>cscope.files
+cgrep.sh -o "^[ ]*#include *<([^>]*)>" | grep -E -o "#include *<([^>]*)>" | sort -u | grep -v "\-\-" | sed -e 's/#include *<//g' | sed -e 's/>//g' >/tmp/csfile.list
+
+glib_file_path=$(find /usr -name glibconfig.h 2>/dev/null)
+if [ "$glib_file_path" != "" ]; then
+    glibver=$(grep GLIB_MAJOR_VERSION ${glib_file_path} | awk '{print $3}')
+    if [ -d "/usr/include/glib-${glibver}.0/" ]; then
+        find /usr/include/glib-${glibver}.0/ -type f -name "*.h" | grep -v "\/gio\/" >>/tmp/csfile.list
     fi
+fi
+gcc_version=$(gcc --version | grep gcc | awk '{print $3}')
+while read line; do
+    filepath=$line
+    if [ -f $filepath ] && [ ! -h $filepath ]; then
+        echo $filepath >>cscope.files
+        continue
+    fi
+
+    filepath="/usr/include/"$line
+    if [ -f $filepath ] && [ ! -h $filepath ]; then
+        echo $filepath >>cscope.files
+        continue
+    fi
+
+    filepath="/usr/local/include/"$line
+    if [ -f $filepath ] && [ ! -h $filepath ]; then
+        echo $filepath >>cscope.files
+        continue
+    fi
+
+    filepath="/usr/lib/gcc/x86_64-redhat-linux/${gcc_version}/include/"$line
+    if [ -f $filepath ] && [ ! -h $filepath ]; then
+        echo $filepath >>cscope.files
+        continue
+    fi
+
+    #echo "ignore file: $line"
 done </tmp/csfile.list
 rm -f /tmp/csfile.list
