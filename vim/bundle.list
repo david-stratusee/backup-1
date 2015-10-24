@@ -52,3 +52,4 @@ vim-space        https://github.com/spiiph/vim-space.git
 vundle        https://github.com/gmarik/vundle.git
 xml.vim        https://github.com/othree/xml.vim.git
 yaml.vim        https://github.com/vim-scripts/yaml.vim.git
+xterm-color-table.vim   https://github.com/guns/xterm-color-table.vim.git
