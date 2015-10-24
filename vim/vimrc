@@ -327,14 +327,16 @@ autocmd FileType python runtime! autoload/pythoncomplete.vim
 
 let python_highlight_all=1
 
-"缺省不产生备份文件
+" no backup
 set nobackup
+set noundofile
 
 "保存文件前建立备份，保存成功后删除该备份
 set writebackup
 
 "关闭提示音
 set vb t_vb=
+set visualbell            " visual bell instead of beeping
 
 " 不在单词中间断行
 set lbr
@@ -364,8 +366,6 @@ set autowrite
 
 "允许在有未保存的修改时切换缓冲区
 set hidden
-
-set visualbell            " visual bell instead of beeping
 
 "选中一段文字并全文搜索这段文字
 vmap <silent> ,/ y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
