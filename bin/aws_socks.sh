@@ -121,12 +121,15 @@ function update_pac()
         rm -f /tmp/proxy.pac
         echo -n curl --connect-timeout 30 -s http://david-holonetsecurity.github.io/proxy.pac -o /tmp/proxy.pac
         curl --connect-timeout 30 -s http://david-holonetsecurity.github.io/proxy.pac -o /tmp/proxy.pac
+        curl_res=$?
 
-        echo " -- [$?]"
+        echo " -- [${curl_res}]"
 
         #echo wget -T 10 -nv http://david-holonetsecurity.github.io/proxy.pac -P /tmp/
         #wget -T 10 -nv http://david-holonetsecurity.github.io/proxy.pac -P /tmp/
-        if [ $? -eq 0 ]; then
+        #curl_res=$?
+
+        if [ ${curl_res} -eq 0 ]; then
             sudo mv /tmp/proxy.pac ${local_proxydir}/
             echo "Save proxy.pac to ${local_proxydir}"
         fi

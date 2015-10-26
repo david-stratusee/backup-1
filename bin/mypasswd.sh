@@ -24,10 +24,23 @@ fi
 system=`uname -s`
 
 domain=$1
-password=$2
+username=$2
 domlen=${#domain}
+tmpfile=${HOME}/.mypasswd
 
-all_str=${domain}.${password}.${domlen}
+if [ -f ${tmpfile} ]; then
+    nitem=$(grep -c "${domain} ${username}" ${tmpfile})
+    if [ $nitem -eq 1 ]; then
+        echo $(grep "${domain} ${username}" ${tmpfile} | awk '{print $3}')
+        exit 0
+    elif [ $nitem -gt 1 ]; then
+        echo "More than one item is recorded in ${tmpfile}"
+        grep "${domain} ${username}" ${tmpfile} | awk '{print $1" "$2}'
+        exit 1
+    fi
+fi
+
+all_str=${domain}.${username}.${domlen}
 
 #echo $all_str
 md5_ret=`mymd5 $all_str`
@@ -39,4 +52,6 @@ let ret2_len=16-ret2_start
 ret1=${md5_ret:0:${domlen}} 
 ret2=${md5_ret:${ret2_start}:${ret2_len}} 
 
-echo $ret1@`upper_echo $ret2`
+password="$ret1@`upper_echo $ret2`"
+echo $password
+echo "${domain} ${username} ${password}" >>${tmpfile}
