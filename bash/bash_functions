@@ -6,8 +6,8 @@ function diff_r()
 
 function gdiff()
 {
-    if [ $# -gt 0 ]; then
-        git wdiff `cat $@`
+    if [ $# -gt 0 ] && [ -f $1 ]; then
+        git wdiff `cat $1`
     else
         echo "gdiff filename"
     fi
