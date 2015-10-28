@@ -66,7 +66,7 @@ fi
 
 if [ "$msg" == "" ]; then
     msg_action="-m"
-    msg="Update $file_list"
+    msg="${action} $file_list"
 fi
 
 if [ "$action" != "add" ] && [ "$action" != "rm" ]; then
