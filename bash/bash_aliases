@@ -1,8 +1,6 @@
 #
 # Some shortcuts for different directory listings
 alias ls='ls -hF --color=auto --show-control-chars --group-directories-first' # classify files in colour
-alias dir='ls --format=vertical'
-alias vdir='ls --format=long'
 alias ll='ls -l'                                    # long list
 alias la='ls -A'                                    # all but . and ..
 alias l='ls -CF'                                    #

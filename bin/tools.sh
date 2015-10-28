@@ -235,3 +235,10 @@ function get_dnsip()
     echo $dstip
     return 0
 }
+
+sysn=$(uname -s)
+if [ "$sysn" == "Linux" ]; then
+    alias pss='ps axfo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,etime,wchan:18,command'
+else
+    alias pss='ps axo user,pid,ppid,pcpu,pmem,rss,stat,stime,etime,command'
+fi
