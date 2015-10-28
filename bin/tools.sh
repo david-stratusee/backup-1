@@ -33,6 +33,39 @@ else
     alias pss='ps axo user,pid,ppid,pcpu,pmem,rss,stat,stime,etime,command'
 fi
 
+function diff_r()
+{
+	diff $@ | less -RF
+}
+
+function gdiff()
+{
+    if [ $# -gt 0 ] && [ -f $1 ]; then
+        git wdiff `cat $1`
+    else
+        echo "gdiff filename"
+    fi
+}
+
+function pssx()
+{
+    filterlist=$1
+    pidlist=$(pss | grep -v grep | egrep --color=auto "(${filterlist})" | awk '{print $2}')
+    if [ "${pidlist}" == "" ]; then
+        echo No such process: $1
+        return 1;
+    fi
+    newpidlist=`echo $pidlist | sed -e 's/ /,/g'`
+    ps mo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,etime,wchan:18,command --pid "${newpidlist}"
+    return 0
+}
+
+function psmx()
+{
+    pssx "squid|resmgr|icap|http|redis|logstash|LogDaemon|_watchdog\b|ssl_crtd"
+}
+
+
 function colorecho()
 {
     color_print.py $1 "$2"
