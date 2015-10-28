@@ -42,7 +42,7 @@ function show_proxy()
     fi
     echo ===========================
     echo "PROCESS INFO:[${USE_SSH}]"
-    pss | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|httpd|watch_socks|watch_sso)"
+    pss | grep -v grep | egrep --color=auto "(ssh -D|COMMAND|local.js|httpd|watch_socks|watch_sso)"
     echo ===========================
     if [ ${USE_SSH} -ne 0 ] && [ -f /tmp/watch_socks.log ]; then
         echo "/tmp/watch_socks.log:"

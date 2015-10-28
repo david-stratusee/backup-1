@@ -25,7 +25,7 @@ function show_proxy_stat()
 {
     echo ===========================
     echo "PROCESS INFO:"
-    pss | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|watch_socks|sslsplit|dnschef|watch_sso)"
+    pss | grep -v grep | egrep --color=auto "(ssh -D|COMMAND|local.js|watch_socks|sslsplit|dnschef|watch_sso)"
     echo ===========================
     if [ ${USE_SSH} -ne 0 ] && [ -f /tmp/watch_socks.log ]; then
         echo "/tmp/watch_socks.log:"
