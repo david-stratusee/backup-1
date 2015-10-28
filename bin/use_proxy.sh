@@ -10,6 +10,8 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+. ${HOME}/bin/tools.sh
+
 netname="en0"
 os_name=`uname -s`
 is_linux=0
@@ -104,7 +106,7 @@ if [ $mode -eq ${CLEAR_MODE} ]; then
 
     if [ -f /etc/sysconfig/network-scripts/ifcfg-${netname} ]; then
         sudo sed -i -e 's/^DEFROUTE=.*/DEFROUTE="yes"/g' /etc/sysconfig/network-scripts/ifcfg-${netname}
-        dhpid=`ps -ef | grep dhcl | grep ${netname} | awk '{print $2}'`
+        dhpid=`pss | grep dhcl | grep ${netname} | awk '{print $2}'`
         if [ "$dhpid" != "" ]; then
             sudo kill $dhpid
         fi
@@ -119,7 +121,7 @@ elif [ $mode -eq ${NORMAL_MODE} ]; then
     elif [ ${dst} == ${BOX} ]; then
         if [ ${is_linux} -ne 0 ] && [ -f /etc/sysconfig/network-scripts/ifcfg-${netname} ]; then
             sudo sed -i -e 's/^DEFROUTE=.*/DEFROUTE="no"/g' /etc/sysconfig/network-scripts/ifcfg-${netname}
-            dhpid=`ps -ef | grep dhcl | grep ${netname} | awk '{print $2}'`
+            dhpid=`pss | grep dhcl | grep ${netname} | awk '{print $2}'`
             if [ "$dhpid" != "" ]; then
                 sudo kill $dhpid
             fi

@@ -1,6 +1,6 @@
 #!/bin/bash -
 
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 function clear_tag_files()
 {

@@ -1,5 +1,7 @@
 #!/bin/bash -
 
+. ${HOME}/bin/tools.sh
+
 port=""
 aliveinterval=""
 username=$1
@@ -34,7 +36,7 @@ socks_port=15500
 
 while :
 do
-    pidcount=`ps -ef | grep -v grep | grep -c "ssh -D"`
+    pidcount=`pss | grep -v grep | grep -c "ssh -D"`
     if [ $pidcount -eq 0 ]; then
         echo -e " ["`date +'%H:%M:%S'`"] ssh -D ${socks_port} ${ssh_args} ${username}@${hostname}${port}${aliveinterval}"
         ssh -D ${socks_port} ${ssh_args} ${username}@${hostname}${port}${aliveinterval}
@@ -44,7 +46,7 @@ do
         #check_proxy=$?
         if [ ${check_proxy} -ne 1 ]; then
         #if [ ${check_proxy} -ne 0 ]; then
-            sshpid=`ps -ef | grep "ssh -D" | grep -v grep | awk '{print $2}'`
+            sshpid=`pss | grep "ssh -D" | grep -v grep | awk '{print $2}'`
             echo kill $sshpid, result $check_proxy
             kill $sshpid
         fi

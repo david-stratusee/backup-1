@@ -9,7 +9,7 @@
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 #-------------------------------------------------------------------------------
 # config here
@@ -42,7 +42,7 @@ function show_proxy()
     fi
     echo ===========================
     echo "PROCESS INFO:[${USE_SSH}]"
-    ps -ef | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|httpd|watch_socks|watch_sso)"
+    pss | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|httpd|watch_socks|watch_sso)"
     echo ===========================
     if [ ${USE_SSH} -ne 0 ] && [ -f /tmp/watch_socks.log ]; then
         echo "/tmp/watch_socks.log:"
@@ -77,9 +77,9 @@ function fill_and_run_proxy()
 
 function kill_process()
 {
-    pidc=`ps -ef | grep -v grep | grep -c "$@"`
+    pidc=`pss | grep -v grep | grep -c "$@"`
     if [ $pidc -gt 0 ]; then
-        sshpid=`ps -ef | grep "$@" | grep -v grep | awk '{print $2}'`
+        sshpid=`pss | grep "$@" | grep -v grep | awk '{print $2}'`
         for p in $sshpid; do
             echo "kill $@, pid: ${p}"
             sudo kill $p
@@ -145,7 +145,7 @@ function update_pac()
 
 function stop_apache()
 {
-    httpd_count=`ps -ef | grep -v grep | grep -c httpd`
+    httpd_count=`pss | grep -v grep | grep -c httpd`
     if [ ${httpd_count} -gt 0 ]; then
         sudo apachectl graceful-stop
     fi

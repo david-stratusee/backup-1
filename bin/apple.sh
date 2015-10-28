@@ -10,5 +10,7 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+. ${HOME}/bin/tools.sh
+
 sudo systemctl $1 dnsmasq.service
-ps -ef | grep -v grep | grep dnsmasq
+pss | grep -v grep | grep dnsmasq

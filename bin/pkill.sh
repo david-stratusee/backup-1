@@ -10,6 +10,8 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+. ${HOME}/bin/tools.sh
+
 kill_arg=""
 if [ "$1" == "-9" ]; then
     kill_arg=" -9"
@@ -18,7 +20,7 @@ fi
 
 LOG_FILE="/tmp/pkill.log"
 
-ps axf | grep $1 | grep -v grep | grep -v pkill.sh > $LOG_FILE
+pss | grep $1 | grep -v grep | grep -v pkill.sh > $LOG_FILE
 echo ----------
 cat $LOG_FILE
 echo ----------

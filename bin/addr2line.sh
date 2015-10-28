@@ -10,7 +10,7 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 if [ $# -eq 0 ] || [ $# -gt 2 ]; then
     echo -n "Usage: `basename $0`"

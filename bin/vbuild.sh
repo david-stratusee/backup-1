@@ -4,7 +4,7 @@
 # mybuild.sh [-c|-h|-q]
 # ${!#} means the last parameters
 
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 if [ ! -f "Makefile.am" ]; then
 	echo "Not find Makefile.am, exit!"

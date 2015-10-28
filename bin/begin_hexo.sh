@@ -9,8 +9,10 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+. ${HOME}/bin/tools.sh
+
 cd $HOME/Documents/blog
 hexo server 1>>$HOME/log/hexo_error.log 2>&1 &
 
-ps axuf | grep "hexo server" | grep -v grep
+pss | grep "hexo server" | grep -v grep
 

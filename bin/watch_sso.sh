@@ -8,10 +8,12 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+. ${HOME}/bin/tools.sh
+
 cd ${HOME}/work/openshift/shadowsocks
 while :
 do
-    pidc=`ps -ef | grep -v grep | grep -c "local.js"`
+    pidc=`pss | grep -v grep | grep -c "local.js"`
     if [ $pidc -eq 0 ]; then
         nohup node local.js -s "wss://shadowsocks-crazyman.rhcloud.com:8443" 1>/dev/null 2>/tmp/shadowsocks-error.log &
     fi

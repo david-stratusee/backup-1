@@ -27,6 +27,12 @@ NC="\e[0m" # No Color
 # --> Nice. Has the same effect as using "ansi.sys" in DOS
 BLOCK
 
+if [ -d /proc ]; then
+    alias pss='ps axfo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,etime,wchan:18,command'
+else
+    alias pss='ps axo user,pid,ppid,pcpu,pmem,rss,stat,stime,etime,command'
+fi
+
 function colorecho()
 {
     color_print.py $1 "$2"
@@ -196,7 +202,7 @@ function execute_hint()
 
 function check_process_num()
 {
-    ps_count=`ps -ef | grep -v "bash\b" | grep "$1\b" | grep -v grep | wc -l`
+    ps_count=$(pss | grep -v "bash\b" | grep "$1\b" | grep -v grep | wc -l)
     return $ps_count
 }
 
@@ -236,8 +242,3 @@ function get_dnsip()
     return 0
 }
 
-if [ -d /proc ]; then
-    alias pss='ps axfo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,etime,wchan:18,command'
-else
-    alias pss='ps axo user,pid,ppid,pcpu,pmem,rss,stat,stime,etime,command'
-fi

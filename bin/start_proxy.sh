@@ -10,7 +10,7 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 username=david
 available_host_port=([0]="david:us.stratusee.com:2226" [1]="55e6658f0c1e66d617000070:shadowsocks-crazyman.rhcloud.com:22")
@@ -25,7 +25,7 @@ function show_proxy_stat()
 {
     echo ===========================
     echo "PROCESS INFO:"
-    ps auxf | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|watch_socks|sslsplit|dnschef|watch_sso)"
+    pss | grep -v grep | egrep --color=auto "(ssh -D|CMD|local.js|watch_socks|sslsplit|dnschef|watch_sso)"
     echo ===========================
     if [ ${USE_SSH} -ne 0 ] && [ -f /tmp/watch_socks.log ]; then
         echo "/tmp/watch_socks.log:"
@@ -61,9 +61,9 @@ function fill_and_run_proxy()
 
 function kill_process()
 {
-    pidc=`ps -ef | grep -v "grep" | grep -c "$@"`
+    pidc=`pss | grep -v "grep" | grep -c "$@"`
     if [ $pidc -gt 0 ]; then
-        sshpid=`ps -ef | grep -v "grep" | grep "$@" | awk '{print $2}'`
+        sshpid=`pss | grep -v "grep" | grep "$@" | awk '{print $2}'`
         for p in $sshpid; do
             echo "kill $@, pid: ${p}"
             sudo kill $p
@@ -73,9 +73,9 @@ function kill_process()
 
 function kill_sslsplit()
 {
-    pidc=`ps -ef | grep -v "proxychains" | grep -v "grep" | grep -c "sslsplit"`
+    pidc=`pss | grep -v "proxychains" | grep -v "grep" | grep -c "sslsplit"`
     if [ $pidc -gt 0 ]; then
-        sshpid=`ps -ef | grep -v "proxychains" | grep -v "grep" | grep "sslsplit" | awk '{print $2}'`
+        sshpid=`pss | grep -v "proxychains" | grep -v "grep" | grep "sslsplit" | awk '{print $2}'`
         for p in $sshpid; do
             echo "kill sslsplit, pid: ${p}"
             sudo kill $p
@@ -85,9 +85,9 @@ function kill_sslsplit()
 
 function kill_dnschef()
 {
-    pidc=`ps -ef | grep -v "nohup" | grep -v "grep" | grep -c "dnschef.py"`
+    pidc=`pss | grep -v "nohup" | grep -v "grep" | grep -c "dnschef.py"`
     if [ $pidc -gt 0 ]; then
-        sshpid=`ps -ef | grep -v "nohup" | grep -v "grep" | grep "dnschef.py" | awk '{print $2}'`
+        sshpid=`pss | grep -v "nohup" | grep -v "grep" | grep "dnschef.py" | awk '{print $2}'`
         for p in $sshpid; do
             echo "kill dnschef.py, pid: ${p}"
             sudo kill $p
@@ -227,9 +227,9 @@ elif [ ${op_mode} -eq ${CLEAR_MODE} ]; then
 fi
 
 if [ $USE_SSH -ne 0 ]; then
-    ssh_num=`ps -ef | grep -v grep | grep -c "ssh -D"`
+    ssh_num=`pss | grep -v grep | grep -c "ssh -D"`
 else
-    ssh_num=`ps -ef | grep -v grep | grep -c "local.js"`
+    ssh_num=`pss | grep -v grep | grep -c "local.js"`
 fi
 if [ ${ssh_num} -eq 0 ]; then
     clear_proxy

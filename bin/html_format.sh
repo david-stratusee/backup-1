@@ -9,7 +9,7 @@
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 if [ $# -lt 2 ]; then
 	echo "`basename $0` input output"

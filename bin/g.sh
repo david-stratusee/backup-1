@@ -9,7 +9,7 @@
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
-. tools.sh
+. ${HOME}/bin/tools.sh
 
 function gohelp()
 {
@@ -29,7 +29,7 @@ do_exit=0
 while getopts 'm:f:r:c:elh' opt; do
     case $opt in
         l)
-            ps -ef | grep -v grep | grep sockets
+            pss | grep -v grep | grep sockets
             exit 0
             ;;
         e)
@@ -99,10 +99,10 @@ fi
 
 if [ ${do_exit} -ne 0 ]; then
     ssh -O stop ${username}@${dstip}${ssh_dstport}
-    ps_count=`ps -ef | grep -v grep | grep -c ${dstip}`
+    ps_count=`pss | grep -v grep | grep -c ${dstip}`
     if [ ${ps_count} -gt 0 ]; then
         sleep 1
-        ps_count=`ps -ef | grep -v grep | grep -c ${dstip}`
+        ps_count=`pss | grep -v grep | grep -c ${dstip}`
         if [ ${ps_count} -gt 0 ]; then
             ssh -O exit ${username}@${dstip}${ssh_dstport}
         fi
