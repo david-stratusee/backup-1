@@ -27,11 +27,14 @@ NC="\e[0m" # No Color
 # --> Nice. Has the same effect as using "ansi.sys" in DOS
 BLOCK
 
-if [ -d /proc ]; then
-    alias pss='ps axfo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,etime,wchan:18,command'
-else
-    alias pss='ps axo user,pid,ppid,pcpu,pmem,rss,stat,stime,etime,command'
-fi
+function pss()
+{
+    if [ -d /proc ]; then
+        ps axfo user,pid,ppid,pcpu,pmem,rss,nlwp,psr,stat,start_time,etime,wchan:18,command
+    else
+        ps axo user,pid,ppid,pcpu,pmem,rss,stat,stime,etime,command
+    fi
+}
 
 function diff_r()
 {
