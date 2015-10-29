@@ -43,8 +43,6 @@ def send_func(fullpath, local_convert):
         fp = open(fullpath, 'rb')
         att1 = MIMEText(fp.read(), 'base64', 'utf-8')
         fp.close()
-        if need_delete:
-            os.remove(fullpath)
     except Exception, e:
         if need_delete:
             os.remove(fullpath)
@@ -81,11 +79,15 @@ def send_func(fullpath, local_convert):
         server.close()
         print "[%s] OK" % time.asctime(time.localtime(time.time()))
 
+        if need_delete:
+            os.remove(fullpath)
+
         print "==========================="
 
         return 0
     except Exception, e:
         print 'error when send file: ' + str(e)
+        print 'check: ' + fullpath
 
         print "==========================="
         return 1
