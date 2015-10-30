@@ -8,9 +8,9 @@
 
 set -o nounset                              # Treat unset variables as an error
 
-sysctl -w net.ipv4.conf.all.accept_redirects="0"
-sysctl -w net.ipv4.conf.all.send_redirects="0"
-sysctl -w net.ipv4.conf.default.accept_redirects="0"
-sysctl -w net.ipv4.conf.default.send_redirects="0"
-sysctl -w net.ipv4.conf.eth0.accept_redirects="0"
-sysctl -w net.ipv4.conf.eth0.send_redirects="0"
+sysctl -w net.ipv4.conf.all.accept_redirects="$1"
+sysctl -w net.ipv4.conf.all.send_redirects="$1"
+sysctl -w net.ipv4.conf.default.accept_redirects="$1"
+sysctl -w net.ipv4.conf.default.send_redirects="$1"
+sysctl -w net.ipv4.conf.eth0.accept_redirects="$1"
+sysctl -w net.ipv4.conf.eth0.send_redirects="$1"
