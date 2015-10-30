@@ -13,7 +13,7 @@ fi
 if [ $# -gt 0 ]; then
     dest_path=$1
 else
-    dest_path="../../../david-holonetsecurity.github.io"
+    dest_path="../../../david-holonet.github.io"
 fi
 if [ -f /Library/WebServer/Documents/proxy.pac ]; then
     cp -f flora_pac.pac /Library/WebServer/Documents/proxy.pac

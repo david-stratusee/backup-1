@@ -235,7 +235,7 @@ if [ ${ssh_num} -eq 0 ]; then
     clear_proxy
 
     #rm -f /tmp/proxy.pac
-    #wget -nv http://david-holonetsecurity.github.io/proxy.pac -P /tmp/
+    #wget -nv http://david-holonet.github.io/proxy.pac -P /tmp/
     #sudo cp -f /tmp/proxy.pac /etc/polipo/proxy.pac
 
     fill_and_run_proxy

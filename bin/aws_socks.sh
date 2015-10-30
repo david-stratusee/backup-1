@@ -119,14 +119,14 @@ function update_pac()
     has_curl=$1
     if [ $has_curl -ne 0 ]; then
         rm -f /tmp/proxy.pac
-        echo -n curl --connect-timeout 30 -s http://david-holonetsecurity.github.io/proxy.pac -o /tmp/proxy.pac
-        curl --connect-timeout 30 -s http://david-holonetsecurity.github.io/proxy.pac -o /tmp/proxy.pac
+        echo -n curl --connect-timeout 30 -s http://david-holonet.github.io/proxy.pac -o /tmp/proxy.pac
+        curl --connect-timeout 30 -s http://david-holonet.github.io/proxy.pac -o /tmp/proxy.pac
         curl_res=$?
 
         echo " -- [${curl_res}]"
 
-        #echo wget -T 10 -nv http://david-holonetsecurity.github.io/proxy.pac -P /tmp/
-        #wget -T 10 -nv http://david-holonetsecurity.github.io/proxy.pac -P /tmp/
+        #echo wget -T 10 -nv http://david-holonet.github.io/proxy.pac -P /tmp/
+        #wget -T 10 -nv http://david-holonet.github.io/proxy.pac -P /tmp/
         #curl_res=$?
 
         if [ ${curl_res} -eq 0 ]; then
@@ -312,7 +312,7 @@ if [ "${MODE}" == "normal" ]; then
             start_apache
             sudo networksetup -setautoproxyurl ${ETH} "http://127.0.0.1/proxy.pac"
         else
-            sudo networksetup -setautoproxyurl ${ETH} "http://david-holonetsecurity.github.io/proxy.pac"
+            sudo networksetup -setautoproxyurl ${ETH} "http://david-holonet.github.io/proxy.pac"
         fi
         sudo networksetup -setautoproxystate ${ETH} on
     else
