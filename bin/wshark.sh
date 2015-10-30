@@ -19,5 +19,5 @@ fi
 filter=$1
 shift
 
-echo tshark -O \"http,message-http,icap,data-text-lines\" -d \"tcp.port==8080,http\" -d \"tcp.port==3128,http\" -d \"tcp.port==1344,icap\" -f \"$filter and greater 80\" $@
-sudo tshark -O "http,message-http,icap,data-text-lines" -d "tcp.port==8080,http" -d "tcp.port==3128,http" -d "tcp.port==1344,icap" -f "$filter and greater 80" $@
+echo tshark -O \"http,message-http,data-text-lines\" -d \"tcp.port==8081,http\" -f \"$filter and greater 80\" $@
+sudo tshark -O "http,message-http,data-text-lines" -d "tcp.port==8081,http" -f "$filter and greater 80" $@
